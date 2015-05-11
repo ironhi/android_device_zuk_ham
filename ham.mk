@@ -106,15 +106,15 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
-# ConfigPanel
-#PRODUCT_PACKAGES += \
-#    ConfigPanel
-
 # DRM
 PRODUCT_PACKAGES += \
     android.hardware.drm@1.0-impl
 
-# Fingerprint sensor
+#Doze
+PRODUCT_PACKAGES += \
+    HamDoze
+
+# Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service \
     fingerprint.msm8974
