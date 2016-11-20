@@ -163,6 +163,9 @@ TARGET_PROVIDES_LIBLIGHT := true
 # Lineage Hardware
 BOARD_HARDWARE_CLASS += $(DEVICE_PATH)/lineagehw
 
+# Hardware
+BOARD_USES_CYANOGEN_HARDWARE := true
+
 # No old RPC for prop
 TARGET_NO_RPC := true
 
