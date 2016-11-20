@@ -154,6 +154,10 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
     lights.msm8974
 
+# LiveDisplay native
+PRODUCT_PACKAGES += \
+    libjni_livedisplay
+
 # Widevine
 PRODUCT_PACKAGES += \
     libshim_wvm
