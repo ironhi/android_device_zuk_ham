@@ -117,7 +117,8 @@ PRODUCT_PACKAGES += \
 # Fingerprint
 PRODUCT_PACKAGES += \
     android.hardware.biometrics.fingerprint@2.1-service \
-    fingerprint.msm8974
+    fingerprint.msm8974 \
+    HamPocketMode
 
 # VNDK-SP:
 PRODUCT_PACKAGES += \
