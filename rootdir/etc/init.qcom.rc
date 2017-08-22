@@ -126,6 +126,8 @@ on boot
     chmod 0666 /sys/devices/f9927000.spi/spi_master/spi4/spi4.0/setup/irq
     chmod 0666 /sys/devices/f9927000.spi/spi_master/spi4/spi4.0/setup/key
     chmod 0666 /sys/devices/f9927000.spi/spi_master/spi4/spi4.0/setup/wakeup
+    chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/proximity_state
+    chown system system /sys/devices/soc/soc:fpc_fpc1020/proximity_state
     write /sys/devices/f9927000.spi/spi_master/spi4/spi4.0/setup/wakeup 1
     write /sys/deviceS/f9927000.spi/spi_master/spi4/spi4.0/setup/enable_navi 1
 

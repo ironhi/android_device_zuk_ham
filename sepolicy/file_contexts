@@ -1,3 +1,4 @@
+
 # Camera
 /data/cam_socket.*                                 u:object_r:camera_socket:s0
 
@@ -29,4 +30,8 @@
 
 # TTY
 /dev/ttyGS2                                     u:object_r:tty_device:s0
-/dev/ttyGS1                                     u:object_r:tty_device:s0
+/dev/ttyGS1                                     u:object_r:tty_device:s0 
+
+# sys
+/sys/devices/soc/soc:fpc_fpc1020/proximity_state                u:object_r:sysfs_fpc_proximity:s0
+
