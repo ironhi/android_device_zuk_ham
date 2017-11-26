@@ -116,7 +116,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.0-service
+    android.hardware.biometrics.fingerprint@2.1-service
 
 # VNDK-SP:
 PRODUCT_PACKAGES += \
@@ -152,6 +152,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
     lights.msm8974
+
+# Widevine
+PRODUCT_PACKAGES += \
+    libshim_wvm
 
 # IPC Security config
 PRODUCT_COPY_FILES += \
@@ -190,6 +194,10 @@ PRODUCT_PACKAGES += \
 # Sensors
 PRODUCT_PACKAGES += \
     android.hardware.sensors@1.0-impl
+
+# Seccomp policy
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/seccomp_policy/mediacodec.policy:system/vendor/etc/seccomp_policy/mediacodec.policy
 
 # Keylayouts
 PRODUCT_COPY_FILES += \
