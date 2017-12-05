@@ -91,7 +91,7 @@ TARGET_USE_COMPAT_GRALLOC_ALIGN := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # Tap to wake
-TARGET_TAP_TO_WAKE_NODE := /sys/devices/virtual/touch/tp_dev/gesture_on
+TARGET_TAP_TO_WAKE_NODE :="/sys/devices/virtual/touch/tp_dev/gesture_on"
 
 # Filesystem
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 20971520
