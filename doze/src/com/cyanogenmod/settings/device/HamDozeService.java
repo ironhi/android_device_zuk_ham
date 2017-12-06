@@ -35,37 +35,99 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DozeService extends Service {
+public class HamDozeService extends Service {
     private static final String TAG = "HamDozeService";
     private static final boolean DEBUG = false;
 
-    private ProximitySensor mProximitySensor;
-    private TiltSensor mTiltSensor;
+    private static final String DOZE_INTENT = "com.android.systemui.doze.pulse";
+
+    private static final String GESTURE_HAND_WAVE_KEY = "gesture_hand_wave";
+    private static final String GESTURE_POCKET_KEY = "gesture_pocket";
+
+    private static final int POCKET_DELTA_NS = 1000 * 1000 * 1000;
+
+    private Context mContext;
+    private HamProximitySensor mSensor;
+    private PowerManager mPowerManager;
+
+    private boolean mHandwaveGestureEnabled = false;
+    private boolean mPocketGestureEnabled = false;
+
+    class HamProximitySensor implements SensorEventListener {
+        private SensorManager mSensorManager;
+        private Sensor mSensor;
+
+        private boolean mSawNear = false;
+        private long mInPocketTime = 0;
+
+        public HamProximitySensor(Context context) {
+            mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        }
+
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            boolean isNear = event.values[0] < mSensor.getMaximumRange();
+            if (mSawNear && !isNear) {
+                if (shouldPulse(event.timestamp)) {
+                    launchDozePulse();
+                }
+            } else {
+                mInPocketTime = event.timestamp;
+            }
+            mSawNear = isNear;
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            /* Empty */
+        }
+
+        private boolean shouldPulse(long timestamp) {
+            long delta = timestamp - mInPocketTime;
+
+            if (mHandwaveGestureEnabled && mPocketGestureEnabled) {
+                return true;
+            } else if (mHandwaveGestureEnabled && !mPocketGestureEnabled) {
+                return delta < POCKET_DELTA_NS;
+            } else if (!mHandwaveGestureEnabled && mPocketGestureEnabled) {
+                return delta >= POCKET_DELTA_NS;
+            }
+            return false;
+        }
+
+        public void enable() {
+            if (mHandwaveGestureEnabled) {
+                mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+            }
+        }
+
+        public void disable() {
+            mSensorManager.unregisterListener(this, mSensor);
+        }
+    }
 
     @Override
     public void onCreate() {
-        if (DEBUG) Log.d(TAG, "Creating service");
-        mProximitySensor = new ProximitySensor(this);
-        mTiltSensor = new TiltSensor(this);
-
-        IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
-        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
-        registerReceiver(mScreenStateReceiver, screenStateFilter);
+        if (DEBUG) Log.d(TAG, "HamDozeService Started");
+        mContext = this;
+        mPowerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+        mSensor = new HamProximitySensor(mContext);
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+        loadPreferences(sharedPrefs);
+        sharedPrefs.registerOnSharedPreferenceChangeListener(mPrefListener);
+        if (!isInteractive() && isDozeEnabled()) {
+            mSensor.enable();
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (DEBUG) Log.d(TAG, "Starting service");
+        IntentFilter screenStateFilter = new IntentFilter(Intent.ACTION_SCREEN_ON);
+        screenStateFilter.addAction(Intent.ACTION_SCREEN_OFF);
+        mContext.registerReceiver(mScreenStateReceiver, screenStateFilter);
         return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-        if (DEBUG) Log.d(TAG, "Destroying service");
-        super.onDestroy();
-        this.unregisterReceiver(mScreenStateReceiver);
-        mProximitySensor.disable();
-        mTiltSensor.disable();
     }
 
     @Override
@@ -73,35 +135,55 @@ public class DozeService extends Service {
         return null;
     }
 
+    private void launchDozePulse() {
+        mContext.sendBroadcast(new Intent(DOZE_INTENT));
+    }
+
+    private boolean isInteractive() {
+        return mPowerManager.isInteractive();
+    }
+
+    private boolean isDozeEnabled() {
+        return Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.DOZE_ENABLED, 1) != 0;
+    }
+
     private void onDisplayOn() {
         if (DEBUG) Log.d(TAG, "Display on");
-        if (Utils.pickUpEnabled(this)) {
-            mTiltSensor.disable();
-        }
-        if (Utils.handwaveGestureEnabled(this) ||
-                Utils.pocketGestureEnabled(this)) {
-            mProximitySensor.disable();
-        }
+        mSensor.disable();
     }
 
     private void onDisplayOff() {
         if (DEBUG) Log.d(TAG, "Display off");
-        if (Utils.pickUpEnabled(this)) {
-            mTiltSensor.enable();
+        if (isDozeEnabled()) {
+            mSensor.enable();
         }
-        if (Utils.handwaveGestureEnabled(this) ||
-                Utils.pocketGestureEnabled(this)) {
-            mProximitySensor.enable();
-        }
+    }
+
+    private void loadPreferences(SharedPreferences sharedPreferences) {
+        mHandwaveGestureEnabled = sharedPreferences.getBoolean(GESTURE_HAND_WAVE_KEY, true);
+        mPocketGestureEnabled = sharedPreferences.getBoolean(GESTURE_POCKET_KEY, true);
     }
 
     private BroadcastReceiver mScreenStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
-                onDisplayOn();
-            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+            if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
                 onDisplayOff();
+            } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                onDisplayOn();
+            }
+        }
+    };
+
+    private SharedPreferences.OnSharedPreferenceChangeListener mPrefListener =
+            new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            if (GESTURE_HAND_WAVE_KEY.equals(key)) {
+                mHandwaveGestureEnabled = sharedPreferences.getBoolean(GESTURE_HAND_WAVE_KEY, true);
+            } else if (GESTURE_POCKET_KEY.equals(key)) {
+                mPocketGestureEnabled = sharedPreferences.getBoolean(key, true);
             }
         }
     };
