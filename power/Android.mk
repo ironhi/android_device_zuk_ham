@@ -11,8 +11,8 @@ LOCAL_SRC_FILES := power.c metadata-parser.c utils.c list.c hint-data.c powerhin
 LOCAL_C_INCLUDES := external/libxml2/include \
                     external/icu/icu4c/source/common
 
-ifeq ($(call is-board-platform-in-list, msm8996), true)
-LOCAL_SRC_FILES += power-8996.c
+ifeq ($(call is-board-platform-in-list, msm8974), true)
+LOCAL_SRC_FILES += power-8974.c
 LOCAL_CFLAGS += -DMPCTLV3
 endif
 
@@ -31,7 +31,7 @@ else
   LOCAL_STATIC_LIBRARIES += $(TARGET_POWER_SET_FEATURE_LIB)
 endif
 
-LOCAL_MODULE := power.msm8996
+LOCAL_MODULE := power.msm8974
 LOCAL_MODULE_TAGS := optional
 LOCAL_CFLAGS += -Wno-unused-parameter -Wno-unused-variable
 include $(BUILD_SHARED_LIBRARY)
