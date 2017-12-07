@@ -1049,8 +1049,6 @@ int QCameraVideoMemory::closeNativeHandle(const void *data, bool metadata)
         }
         if (packet != NULL && packet->eType ==
             kMetadataBufferTypeNativeHandleSource) {
-            native_handle_close(packet->pHandle);
-            native_handle_delete(packet->pHandle);
             packet->pHandle = NULL;
         } else {
             ALOGE("Invalid Data. Could not release");
@@ -1352,123 +1350,6 @@ camera_memory_t *QCameraVideoMemory::getMemory(int index, bool metadata) const
 }
 
 /*===========================================================================
-<<<<<<< HEAD
-=======
-* FUNCTION   : updateNativeHandle
-
-* DESCRIPTION: Updating native handle pointer
-*
-* PARAMETERS :
-*   @index   : buffer index
-*   @metadata: flag if it's metadata
-*
-* RETURN     : camera native handle ptr
-*              NULL if not supported or failed
-*==========================================================================*/
-native_handle_t *QCameraVideoMemory::updateNativeHandle(uint32_t index, bool metadata)
-{
-    if (index >= mMetaBufCount || (!metadata && index >= mBufferCount)) {
-        return NULL;
-    }
-
-    native_handle_t *nh = NULL;
-    if (metadata && mMetadata[index] != NULL) {
-        media_metadata_buffer *packet =
-            (media_metadata_buffer *)mMetadata[index]->data;
-        nh = mNativeHandle[index];
-#ifdef USE_MEDIA_EXTENSIONS
-        packet->pHandle = nh;
-#else
-        packet->meta_handle = nh;
-#endif
-    }
-    return nh;
-}
-
-/*===========================================================================
- * FUNCTION   : closeNativeHandle
- *
- * DESCRIPTION: static function to close video native handle.
- *
- * PARAMETERS :
- *   @data  : ptr to video frame to be returned
- *
- * RETURN     : int32_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
- *==========================================================================*/
-int QCameraVideoMemory::closeNativeHandle(const void *data)
-{
-    int32_t rc = NO_ERROR;
-
-#ifdef USE_MEDIA_EXTENSIONS
-    const media_metadata_buffer *packet =
-            (const media_metadata_buffer *)data;
-    if ((packet != NULL) && (packet->eType ==
-            kMetadataBufferTypeNativeHandleSource)
-            && (packet->pHandle)) {
-        native_handle_close(packet->pHandle);
-        native_handle_delete(packet->pHandle);
-    } else {
-        ALOGE("Invalid Data. Could not release");
-        return BAD_VALUE;
-    }
-#endif
-   return rc;
-}
-
-/*===========================================================================
-* FUNCTION   : closeNativeHandle
-*
-* DESCRIPTION: close video native handle
-*
-* PARAMETERS :
-*   @opaque  : ptr to video frame to be returned
-*
-* RETURN     : int32_t type of status
-*              NO_ERROR  -- success
-*              none-zero failure code
-*==========================================================================*/
-int QCameraVideoMemory::closeNativeHandle(const void *data, bool metadata)
-{
-    int32_t rc = NO_ERROR;
-    int32_t index = -1;
-
-#ifdef USE_MEDIA_EXTENSIONS
-    camera_memory_t *video_mem = (camera_memory_t *)data;
-
-    if(video_mem == NULL) {
-        ALOGE(" video_mem NULL. Failed ");
-        return BAD_VALUE;
-    }
-    if (metadata) {
-        index = getMatchBufIndex(data, metadata);
-        if (index < 0) {
-            ALOGE("Invalid buffer");
-            return BAD_VALUE;
-        }
-        video_mem = getMemory(index, metadata);
-        media_metadata_buffer * packet = NULL;
-        if (video_mem != NULL) {
-           packet = (media_metadata_buffer *)video_mem->data;
-        }
-        if (packet != NULL && packet->eType ==
-            kMetadataBufferTypeNativeHandleSource) {
-            packet->pHandle = NULL;
-        } else {
-            ALOGE("Invalid Data. Could not release");
-            return BAD_VALUE;
-        }
-    } else {
-        ALOGE(" Not of type video meta buffer. Failed ");
-        return BAD_VALUE;
-    }
-#endif
-    return rc;
-}
-
-/*===========================================================================
->>>>>>> 1486344... QCamera2: Don't close duped native handles.
  * FUNCTION   : getMatchBufIndex
  *
  * DESCRIPTION: query buffer index by opaque ptr
