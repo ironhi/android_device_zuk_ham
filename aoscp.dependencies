@@ -8,9 +8,9 @@
     "target_path": "vendor/zuk",
   },
   {
-    "repository": "BigTopKrazies/proprietary_vendor_qcom_binaries",
-    "target_path": "vendor/qcom/binaries",
-    "branch": "n7.1"
+    "repository":  "hardware_sony_thermanager",
+    "target_path": "hardware/sony/thermanager",
+    "remote":      "aoscp"
   },
   {
     "repository": "android_device_qcom_common",
@@ -19,9 +19,5 @@
     "repository": "Srijith2001/android_kernel_cyanogen_msm8974",
     "target_path": "kernel/cyanogen/msm8974",
     "branch": "lineage-15.0"
-  },
-  {
-    "repository": "android_packages_resources_devicesettings",
-    "target_path": "packages/resources/devicesettings"
   }
 ]
