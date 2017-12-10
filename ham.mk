@@ -280,9 +280,9 @@ PRODUCT_PACKAGES += \
 
 # ANT+
 #PRODUCT_PACKAGES += \
-#    AntHalService \
-#    com.dsi.ant.antradio_library \
-#    libantradio
+    AntHalService \
+    com.dsi.ant.antradio_library \
+    libantradio
 
 # Enable Bluetooth HFP
 PRODUCT_PROPERTY_OVERRIDES += \
