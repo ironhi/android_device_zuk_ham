@@ -281,9 +281,15 @@ PRODUCT_PACKAGES += \
 
 # ANT+
 #PRODUCT_PACKAGES += \
+<<<<<<< HEAD
     #AntHalService \
     #com.dsi.ant.antradio_library \
     #libantradio
+=======
+#    AntHalService \
+#    com.dsi.ant.antradio_library \
+#    libantradio
+>>>>>>> parent of b6e58c0... ham : sepolicy and ant+ bringups
 
 # Enable Bluetooth HFP
 PRODUCT_PROPERTY_OVERRIDES += \
