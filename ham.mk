@@ -191,6 +191,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.media.treble_omx=false
+    camera.disable_treble=true
 
 # Power
 PRODUCT_PACKAGES += \
@@ -280,16 +281,13 @@ PRODUCT_PACKAGES += \
 
 # ANT+
 #PRODUCT_PACKAGES += \
-    AntHalService \
-    com.dsi.ant.antradio_library \
-    libantradio
+    #AntHalService \
+    #com.dsi.ant.antradio_library \
+    #libantradio
 
 # Enable Bluetooth HFP
 PRODUCT_PROPERTY_OVERRIDES += \
     bluetooth.hfp.client=1
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
 
 # System properties
 PRODUCT_PROPERTY_OVERRIDES += \

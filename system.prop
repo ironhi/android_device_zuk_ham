@@ -14,6 +14,29 @@ persist.radio.multisim.config=dsds
 # bluetooth
 qcom.bluetooth.soc=smd
 
+# camera
+camera2.portability.force_api=1
+media.stagefright.legacyencoder=true
+media.camera.ts.monotonic=1
+
+
+# Media
+af.fast_track_multiplier=1
+audio_hal.period_size=192
+persist.audio.fluence.voicecall=true
+ro.qc.sdk.audio.fluencetype=fluence
+
+audio.offload.buffer.size.kb=32
+audio.offload.video=true
+audio.offload.multiple.enabled=false
+audio.offload.gapless.enabled=true
+audio.offload.pcm.16bit.enable=true
+audio.offload.pcm.24bit.enable=true
+audio.deep_buffer.media=true
+
+mm.enable.smoothstreaming=true
+media.aac_51_output_enabled=true
+
 # sensors
 ro.qc.sdk.camera.facialproc=true
 ro.qc.sdk.gestures.camera=false
