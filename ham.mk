@@ -69,6 +69,7 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PROPERTY_OVERRIDES += \
+     af.fast_track_multiplier=1
      use.dedicated.device.for.voip=true \
      ro.config.vc_call_vol_steps=6 \
      audio_hal.period_size=192 \
@@ -281,15 +282,9 @@ PRODUCT_PACKAGES += \
 
 # ANT+
 #PRODUCT_PACKAGES += \
-<<<<<<< HEAD
     #AntHalService \
     #com.dsi.ant.antradio_library \
     #libantradio
-=======
-#    AntHalService \
-#    com.dsi.ant.antradio_library \
-#    libantradio
->>>>>>> parent of b6e58c0... ham : sepolicy and ant+ bringups
 
 # Enable Bluetooth HFP
 PRODUCT_PROPERTY_OVERRIDES += \
