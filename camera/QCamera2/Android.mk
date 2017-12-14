@@ -1,4 +1,4 @@
-ifneq (,$(filter $(TARGET_ARCH), arm arm64))
+ifneq (,$(filter $(TARGET_ARCH), arm)
 
 LOCAL_PATH:= $(call my-dir)
 
@@ -68,7 +68,6 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/util \
         $(LOCAL_PATH)/HAL3 \
         hardware/libhardware/include/hardware \
-        hardware/qcom/media/msm8996/libstagefrighthw \
         $(TARGET_OUT_HEADERS)/mm-core/omxcore \
         system/core/include/cutils \
         system/core/include/system \
@@ -86,23 +85,23 @@ ifeq ($(TARGET_TS_MAKEUP),true)
 LOCAL_CFLAGS += -DTARGET_TS_MAKEUP
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/HAL/tsMakeuplib/include
 endif
-ifneq (,$(filter msm8974 msm8916 msm8226 msm8610 msm8916 apq8084 msm8084 msm8994 msm8992 msm8952 msm8937 msm8953 msm8996 msmcobalt, $(TARGET_BOARD_PLATFORM)))
-    LOCAL_CFLAGS += -DVENUS_PRESENT
-endif
-
-ifneq (,$(filter msm8996 msmcobalt,$(TARGET_BOARD_PLATFORM)))
-    LOCAL_CFLAGS += -DUBWC_PRESENT
+ifeq ($(call is-platform-sdk-version-at-least,20),true)
+LOCAL_C_INCLUDES += system/media/camera/include
+else
+LOCAL_CFLAGS += -DUSE_KK_CODE
 endif
 
 #LOCAL_STATIC_LIBRARIES := libqcamera2_util
 LOCAL_C_INCLUDES += \
         $(TARGET_OUT_HEADERS)/qcom/display
 LOCAL_C_INCLUDES += \
-        hardware/qcom/display/msm8996/libqservice
+        hardware/qcom/display/msm8974/libqservice
 LOCAL_SHARED_LIBRARIES := libcamera_client liblog libhardware libutils libcutils libdl libsync libgui
+LOCAL_SHARED_LIBRARIES += libhidltransport libsensor android.hidl.token@1.0-utils android.hardware.graphics.bufferqueue@1.0
 LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface libui libcamera_metadata
 LOCAL_SHARED_LIBRARIES += libqdMetaData libqservice libbinder
 LOCAL_SHARED_LIBRARIES += libcutils libdl
+LOCAL_STATIC_LIBRARIES := libarect
 LOCAL_HEADER_LIBRARIES := OmxCore_headers gralloc_headers
 ifeq ($(TARGET_TS_MAKEUP),true)
 LOCAL_SHARED_LIBRARIES += libts_face_beautify_hal libts_detected_face_hal
