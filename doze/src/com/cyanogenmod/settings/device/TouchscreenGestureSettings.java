@@ -29,6 +29,6 @@ public class TouchscreenGestureSettings extends PreferenceActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
+        super.onResume()
     }
 }
