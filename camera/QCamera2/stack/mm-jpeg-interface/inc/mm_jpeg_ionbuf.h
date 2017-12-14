@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, 2016, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -30,21 +30,17 @@
 #ifndef __MM_JPEG_IONBUF_H__
 #define __MM_JPEG_IONBUF_H__
 
-
-#include <stdio.h>
+// System dependencies
 #include <linux/msm_ion.h>
-#include <sys/mman.h>
-#include <unistd.h>
-#include <errno.h>
-#include <linux/android_pmem.h>
-#include <fcntl.h>
+
+// JPEG dependencies
 #include "mm_jpeg_dbg.h"
 
 typedef struct  {
   struct ion_fd_data ion_info_fd;
   struct ion_allocation_data alloc;
   int p_pmem_fd;
-  long size;
+  size_t size;
   int ion_fd;
   uint8_t *addr;
 } buffer_t;

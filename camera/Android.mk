@@ -1,14 +1,12 @@
-MM_V4L2_DRIVER_LIST += msm8960
-MM_V4L2_DRIVER_LIST += msm8974
-MM_V4L2_DRIVER_LIST += msm8226
-MM_V4L2_DRIVER_LIST += msm8610
-MM_V4L2_DRIVER_LIST += msm_bronze
-MM_V4L2_DRIVER_LIST += msm8916
-
-ifeq ($(call is-board-platform-in-list,$(MM_V4L2_DRIVER_LIST)),true)
-  ifneq ($(USE_CAMERA_STUB),true)
+# TODO:  Find a better way to separate build configs for ADP vs non-ADP devices
+ifneq ($(TARGET_BOARD_AUTO),true)
+  ifneq ($(strip $(USE_CAMERA_STUB)),true)
     ifneq ($(BUILD_TINY_ANDROID),true)
-      include $(call all-subdir-makefiles)
+      ifneq ($(USE_VR_CAMERA_HAL), true)
+        ifneq ($(filter msm8974,$(TARGET_BOARD_PLATFORM)),)
+          include $(addsuffix /Android.mk, $(addprefix $(call my-dir)/, mm-image-codec QCamera2))
+        endif
+      endif
     endif
   endif
 endif
