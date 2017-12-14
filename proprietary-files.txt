@@ -233,6 +233,9 @@ etc/tfa98xx/shenqi_speech.eq
 etc/tfa98xx/shenqi_speech.preset
 vendor/lib/libtfa98xx.so
 
+# STLport
+vendor/lib/libstlport.so
+
 # Thermal
 vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so

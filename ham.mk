@@ -17,7 +17,7 @@
 
 # overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay vendor/extra/overlays/phone-1080p
-#DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
+DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-lineage
 
 # Boot animation
 TARGET_SCREEN_HEIGHT := 1920
@@ -69,6 +69,7 @@ PRODUCT_PACKAGES += \
     tinymix
 
 PRODUCT_PROPERTY_OVERRIDES += \
+     af.fast_track_multiplier=1
      use.dedicated.device.for.voip=true \
      ro.config.vc_call_vol_steps=6 \
      audio_hal.period_size=192 \
@@ -155,6 +156,10 @@ PRODUCT_PACKAGES += \
     android.hardware.light@2.0-impl \
     lights.msm8974
 
+# LiveDisplay native
+PRODUCT_PACKAGES += \
+    libjni_livedisplay
+
 # Widevine
 PRODUCT_PACKAGES += \
     libshim_wvm
@@ -187,6 +192,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.media.treble_omx=false
+    camera.disable_treble=true
 
 # Power
 PRODUCT_PACKAGES += \
@@ -220,6 +226,13 @@ PRODUCT_PACKAGES += \
 # Thermal
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine-8974.conf
+
+# VR
+PRODUCT_PACKAGES += \
+    vr.msm8974
+
+PRODUCT_COPY_FILES += \
+    frameworks/native/data/etc/android.hardware.vr.high_performance.xml:system/etc/permissions/android.hardware.vr.high_performance.xml
 
 # USB
 PRODUCT_PACKAGES += \
@@ -272,16 +285,13 @@ PRODUCT_PACKAGES += \
 
 # ANT+
 #PRODUCT_PACKAGES += \
-#    AntHalService \
-#    com.dsi.ant.antradio_library \
-#    libantradio
+    #AntHalService \
+    #com.dsi.ant.antradio_library \
+    #libantradio
 
 # Enable Bluetooth HFP
 PRODUCT_PROPERTY_OVERRIDES += \
     bluetooth.hfp.client=1
-
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
 
 # System properties
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -328,6 +338,13 @@ PRODUCT_COPY_FILES += \
 # Device uses high-density artwork where available
 PRODUCT_AAPT_CONFIG := normal
 PRODUCT_AAPT_PREF_CONFIG := xxhdpi
+
+# facelock properties
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.facelock.black_timeout=700 \
+    ro.facelock.det_timeout=2500 \
+    ro.facelock.rec_timeout=3500 \
+    ro.facelock.est_max_time=600
 
 # call dalvik heap config
 $(call inherit-product-if-exists, frameworks/native/build/phone-xxhdpi-2048-dalvik-heap.mk)

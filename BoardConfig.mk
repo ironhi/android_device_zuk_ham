@@ -54,7 +54,7 @@ TARGET_KERNEL_ARCH := arm
 BOARD_KERNEL_IMAGE_NAME := zImage
 BOARD_KERNEL_CMDLINE := console=tty60,115200,n8 androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x3b7 ehci-hcd.park=3 androidboot.bootdevice=msm_sdcc.1 vmalloc=480M androidboot.selinux=permissive
 TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8974
-TARGET_KERNEL_CONFIG := lineageos_k9_defconfig
+TARGET_KERNEL_CONFIG := StarCity_defconfig
 
 # Enable DIAG on eng builds
 ifeq ($(TARGET_BUILD_VARIANT),eng)
@@ -68,7 +68,7 @@ BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_LEGACY_ADB_INTERFACE := true
 
 # Audio
-USE_CUSTOM_AUDIO_POLICY := 1
+USE_CUSTOM_AUDIO_POLICY := 0
 BOARD_USES_ALSA_AUDIO := true
 AUDIO_FEATURE_ENABLED_MULTI_VOICE_SESSIONS := true
 AUDIO_FEATURE_ENABLED_HWDEP_CAL := true
@@ -91,7 +91,7 @@ TARGET_USE_COMPAT_GRALLOC_ALIGN := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
 
 # Tap to wake
-TARGET_TAP_TO_WAKE_NODE := /sys/devices/virtual/touch/tp_dev/gesture_on
+TARGET_TAP_TO_WAKE_NODE :="/sys/devices/virtual/touch/tp_dev/gesture_on"
 
 # Filesystem
 BOARD_BOOTIMAGE_PARTITION_SIZE     := 20971520
@@ -111,6 +111,7 @@ TARGET_USES_MKE2FS := true
 USE_OPENGL_RENDERER := true
 TARGET_CONTINUOUS_SPLASH_ENABLED := true
 TARGET_USES_C2D_COMPOSITION := true
+TARGET_USES_HWC2 := true
 TARGET_USES_ION := true
 OVERRIDE_RS_DRIVER := libRSDriver_adreno.so
 HAVE_ADRENO_SOURCE:= false
@@ -146,8 +147,8 @@ TARGET_USES_QCOM_WCNSS_QMI       := true
 TARGET_USES_WCNSS_MAC_ADDR_REV   := true
 
 # Wifi - EAP-SIM
-#CONFIG_EAP_PROXY                 := qmi
-#CONFIG_EAP_PROXY_DUAL_SIM        := true
+CONFIG_EAP_PROXY                 := dummy
+CONFIG_EAP_PROXY_DUAL_SIM        := true
 
 # Filesystem
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -162,6 +163,9 @@ TARGET_PROVIDES_LIBLIGHT := true
 
 # Lineage Hardware
 BOARD_HARDWARE_CLASS += $(DEVICE_PATH)/lineagehw
+
+# Hardware
+BOARD_USES_CYANOGEN_HARDWARE := true
 
 # No old RPC for prop
 TARGET_NO_RPC := true

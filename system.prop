@@ -13,6 +13,25 @@ persist.radio.multisim.config=dsds
 
 # bluetooth
 qcom.bluetooth.soc=smd
+bluetooth.hfp.client=1
+ro.bluetooth.hfp.ver=1.7
+ro.qualcomm.bt.hci_transport=smd
+
+ro.bluetooth.dun=false
+ro.bluetooth.sap=false
+ro.qualcomm.bluetooth.ftp=true
+ro.qualcomm.bluetooth.hfp=true
+ro.qualcomm.bluetooth.hsp=true
+ro.qualcomm.bluetooth.map=true
+ro.qualcomm.bluetooth.nap=true
+ro.qualcomm.bluetooth.opp=true
+ro.qualcomm.bluetooth.pbap=true
+
+
+# camera
+camera2.portability.force_api=1
+media.stagefright.legacyencoder=true
+media.camera.ts.monotonic=1
 
 # sensors
 ro.qc.sdk.camera.facialproc=true
